@@ -1,31 +1,20 @@
 # PalindromeCheckerApp
+# Use Case 3 – Reverse String Based Palindrome Check
 
+## Description
+This use case checks whether a string is a palindrome by reversing the string and comparing it with the original string.
 
-## Use Case 2 – Hardcoded Palindrome Validation
+## Features
+- Iterates through the string from the last character to the first
+- Builds a reversed version of the string
+- Compares the original and reversed strings
+- Displays whether the string is a palindrome or not
 
-### Description
-This use case demonstrates a simple palindrome validation using a predefined (hardcoded) string.
-A palindrome is a word that reads the same forward and backward.
+## How to Compile
+javac UseCase3PalindromeCheckerApp.java
 
-### Objective
-To implement basic palindrome checking logic using a fixed string value.
+## How to Run
+java UseCase3PalindromeCheckerApp
 
-### Data Structure Used
-String
-
-### Algorithm
-1. Store a predefined string in a variable.
-2. Initialize a boolean variable `isPalindrome` as `true`.
-3. Iterate through the string from the beginning to the middle.
-4. Compare characters from the start and the end.
-5. If characters do not match, set `isPalindrome` to `false`.
-6. Display the result in the console.
-
-### Java Class
-UseCase2PalindromeCheckerApp.java
-
-### Sample Input
-madam
-
-### Sample Output
+## Example Output
 madam is a palindrome
