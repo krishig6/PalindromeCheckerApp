@@ -2,86 +2,83 @@ import java.util.Scanner;
 import java.util.Stack;
 import java.util.Deque;
 import java.util.ArrayDeque;
+import java.util.List;
+import java.util.Arrays;
 
 interface PalindromeStrategy {
     boolean isPalindrome(String input);
 }
 
-// Step 2: Implement Stack-based strategy
 class StackStrategy implements PalindromeStrategy {
     @Override
     public boolean isPalindrome(String input) {
         if (input == null) return false;
-
         String normalized = input.replaceAll("\\s+", "").toLowerCase();
         Stack<Character> stack = new Stack<>();
-
-        // Push all characters onto stack
+        for (char c : normalized.toCharArray()) stack.push(c);
         for (char c : normalized.toCharArray()) {
-            stack.push(c);
-        }
-
-        // Compare by popping
-        for (char c : normalized.toCharArray()) {
-            if (c != stack.pop()) {
-                return false;
-            }
+            if (c != stack.pop()) return false;
         }
         return true;
     }
 }
 
-// Step 3: Implement Deque-based strategy
 class DequeStrategy implements PalindromeStrategy {
     @Override
     public boolean isPalindrome(String input) {
         if (input == null) return false;
-
         String normalized = input.replaceAll("\\s+", "").toLowerCase();
         Deque<Character> deque = new ArrayDeque<>();
-
-        // Add all characters to deque
-        for (char c : normalized.toCharArray()) {
-            deque.add(c);
-        }
-
-        // Compare from both ends
+        for (char c : normalized.toCharArray()) deque.add(c);
         while (deque.size() > 1) {
-            if (deque.pollFirst() != deque.pollLast()) {
-                return false;
-            }
+            if (deque.pollFirst() != deque.pollLast()) return false;
         }
         return true;
     }
 }
 
-// Step 4: Context class that uses a strategy
-class PalindromeService {
-    private PalindromeStrategy strategy;
-
-    // Inject strategy at runtime
-    public PalindromeService(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean check(String input) {
-        return strategy.isPalindrome(input);
+class TwoPointerStrategy implements PalindromeStrategy {
+    @Override
+    public boolean isPalindrome(String input) {
+        if (input == null) return false;
+        String normalized = input.replaceAll("\\s+", "").toLowerCase();
+        int left = 0, right = normalized.length() - 1;
+        while (left < right) {
+            if (normalized.charAt(left) != normalized.charAt(right)) return false;
+            left++;
+            right--;
+        }
+        return true;
     }
 }
 
 public class PalindromeCheckerApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
         System.out.print("Enter a string: ");
         String userInput = scanner.nextLine();
 
-        // Choose strategy dynamically
-        PalindromeService stackService = new PalindromeService(new StackStrategy());
-        PalindromeService dequeService = new PalindromeService(new DequeStrategy());
+        // List of strategies
+        List<PalindromeStrategy> strategies = Arrays.asList(
+                new StackStrategy(),
+                new DequeStrategy(),
+                new TwoPointerStrategy()
+        );
 
-        System.out.println("Using StackStrategy: " + stackService.check(userInput));
-        System.out.println("Using DequeStrategy: " + dequeService.check(userInput));
+        List<String> names = Arrays.asList("StackStrategy", "DequeStrategy", "TwoPointerStrategy");
+
+        // Run each strategy and measure time
+        for (int i = 0; i < strategies.size(); i++) {
+            PalindromeStrategy strategy = strategies.get(i);
+            String name = names.get(i);
+
+            long start = System.nanoTime();
+            boolean result = strategy.isPalindrome(userInput);
+            long end = System.nanoTime();
+
+            long duration = end - start;
+            System.out.println(name + ": " + result + " (Time: " + duration + " ns)");
+        }
 
         scanner.close();
     }
