@@ -3,29 +3,40 @@ import java.util.Scanner;
 
 public class PalindromeCheckerApp {
 
-    static boolean isPalindrome(String str, int start, int end) {
+    public static boolean isPalindrome(String input) {
+        if (input == null) return false;
 
-        if (start >= end)
-            return true;
+        // Step 1: Normalize string
+        String normalized = input.replaceAll("\\s+", "").toLowerCase();
 
-        if (str.charAt(start) != str.charAt(end))
-            return false;
+        // Step 2: Apply palindrome logic
+        int left = 0;
+        int right = normalized.length() - 1;
 
-        return isPalindrome(str, start + 1, end - 1);
+        while (left < right) {
+            if (normalized.charAt(left) != normalized.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
     }
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-        Scanner sc = new Scanner(System.in);
+        // Take input from user
+        System.out.print("Enter a string: ");
+        String userInput = scanner.nextLine();
 
-        System.out.print("Enter a word: ");
-        String word = sc.nextLine();
+        // Check palindrome
+        if (isPalindrome(userInput)) {
+            System.out.println("It is a palindrome (ignoring spaces and case).");
+        } else {
+            System.out.println("It is NOT a palindrome.");
+        }
 
-        if (isPalindrome(word, 0, word.length() - 1))
-            System.out.println("Palindrome");
-        else
-            System.out.println("Not Palindrome");
-
-        sc.close();
+        scanner.close();
     }
 }
