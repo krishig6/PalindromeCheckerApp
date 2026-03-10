@@ -1,9 +1,62 @@
-import java.util.Stack;
 import java.util.Scanner;
-import java.util.*;
+
+class Node {
+    char data;
+    Node next;
+
+    Node(char data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
 public class PalindromeCheckerApp {
 
+    static Node reverse(Node head) {
+        Node prev = null;
+        Node current = head;
 
+        while (current != null) {
+            Node next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+        return prev;
+    }
+
+    static boolean isPalindrome(Node head) {
+
+        if (head == null || head.next == null)
+            return true;
+
+        Node slow = head;
+        Node fast = head;
+
+        // Find middle
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Skip middle element if length is odd
+        if (fast != null) {
+            slow = slow.next;
+        }
+
+        Node secondHalf = reverse(slow);
+        Node firstHalf = head;
+
+        while (secondHalf != null) {
+            if (firstHalf.data != secondHalf.data)
+                return false;
+
+            firstHalf = firstHalf.next;
+            secondHalf = secondHalf.next;
+        }
+
+        return true;
+    }
 
     public static void main(String[] args) {
 
@@ -11,28 +64,24 @@ public class PalindromeCheckerApp {
         System.out.print("Enter a word: ");
         String word = sc.nextLine();
 
-        Deque<Character> deque = new ArrayDeque<>();
+        Node head = null, tail = null;
 
-        for(char c : word.toCharArray()){
-            deque.addLast(c);
-        }
+        for (char c : word.toCharArray()) {
+            Node newNode = new Node(c);
 
-        boolean palindrome = true;
-
-        while(deque.size() > 1){
-            char first = deque.removeFirst();
-            char last = deque.removeLast();
-
-            if(first != last){
-                palindrome = false;
-                break;
+            if (head == null) {
+                head = tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
             }
         }
 
-        if(palindrome)
+        if (isPalindrome(head))
             System.out.println("Palindrome");
         else
-            System.out.println("Not a Palindrome");
-    }
+            System.out.println("Not Palindrome");
 
+        sc.close();
+    }
 }
