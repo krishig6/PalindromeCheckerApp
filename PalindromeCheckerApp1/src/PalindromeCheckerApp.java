@@ -5,32 +5,34 @@ public class PalindromeCheckerApp {
 
 
 
-        public static void main(String[] args) {
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Enter a word: ");
-            String word = sc.nextLine();
+    public static void main(String[] args) {
 
-            Queue<Character> queue = new LinkedList<>();
-            Stack<Character> stack = new Stack<>();
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a word: ");
+        String word = sc.nextLine();
 
-            for(char c : word.toCharArray()){
-                queue.add(c);   // Enqueue
-                stack.push(c);  // Push
-            }
+        Deque<Character> deque = new ArrayDeque<>();
 
-            boolean palindrome = true;
-
-            while(!queue.isEmpty()){
-                if(queue.remove() != stack.pop()){
-                    palindrome = false;
-                    break;
-                }
-            }
-
-            if(palindrome)
-                System.out.println("Palindrome");
-            else
-                System.out.println("Not a Palindrome");
+        for(char c : word.toCharArray()){
+            deque.addLast(c);
         }
+
+        boolean palindrome = true;
+
+        while(deque.size() > 1){
+            char first = deque.removeFirst();
+            char last = deque.removeLast();
+
+            if(first != last){
+                palindrome = false;
+                break;
+            }
+        }
+
+        if(palindrome)
+            System.out.println("Palindrome");
+        else
+            System.out.println("Not a Palindrome");
+    }
 
 }
